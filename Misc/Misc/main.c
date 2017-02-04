@@ -10,6 +10,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+#include <limits.h>
 
 //https://www.hackerrank.com/challenges/array-left-rotation
 void printLeftAndRightShift() {
@@ -1339,6 +1340,44 @@ int numSetBits(unsigned int A) {
         count ++;
     }
     return count;
+}
+
+int isNumeric(char ch) {
+    if(ch >= '0' && ch <= '9')
+        return 1;
+    else
+        return 0;
+}
+
+//AtoI https://www.interviewbit.com/problems/atoi/
+int matoi(const char* A) {
+    
+    int sign = 1;
+    int i = 0;
+    int res = 0;
+    while(A[i] == ' ') {
+        i ++;
+    }
+    // printf("I ==== %d\n",i);
+    if(A[i] == '-'){
+        sign = -1;
+        i ++;
+    }
+    else if(A[i] == '+'){
+        sign = 1;
+        i ++;
+    }
+    while(A[i] != '\0' && isNumeric(A[i])) {
+        if(res > INT_MAX/10 || (res == INT_MAX/10 && A[i]-'0' > 7)){
+            if(sign == 1)
+                return INT_MAX;
+            else
+                return INT_MIN;
+        }
+        res = (res * 10) + (A[i] - '0');
+        i ++;
+    }
+    return sign*res;
 }
 
 int main() {
