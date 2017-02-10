@@ -14,6 +14,59 @@ void printArray(int *A, int n) {
     }
 }
 
+//void printArray(int a[][1], int row, int column) {
+//    
+//    for (int i = 0; i < row; i ++) {
+//        for (int j = 0; j < column; j ++) {
+//            printf("%d  ",a[i][j]);
+//        }
+//        printf("\n");
+//    }
+//    printf("\n");
+//}
+
+void spiralArray(int a[1][1]) {
+    
+    int sr = 0, er = 0, sc = 0, ec = 0;
+    int direction = 0; //IT MAY BE 0, 1, 2 OR 3
+    //sr -> Start of Row
+    //er -> End of Row
+    //sc -> Start of Column
+    //ec -> End of Column
+    while (sr <= er && sc <= ec) {
+        
+        if (direction == 0) {
+            for (int index = sc; index <= ec; index ++) {
+                printf("%d ",a[sr][index]);
+            }
+            sr ++;
+        }
+        
+        if (direction == 1) {
+            for (int index = sr; index <= er; index ++) {
+                printf("%d ",a[index][ec]);
+            }
+            ec --;
+        }
+        
+        if (direction == 2) {
+            for (int index = ec; index >= sc; index --) {
+                printf("%d ",a[er][index]);
+            }
+            er --;
+        }
+        
+        if (direction == 3) {
+            for (int index = er; index >= sr; index --) {
+                printf("%d ",a[index][sc]);
+            }
+            sc ++;
+        }
+        direction = (direction + 1) % 4;
+    }
+    printf("\n");
+}
+
 int* plusOne(int* A, int n1, int *length_of_array) {
     
     int *result = (int *)malloc((n1 + 1) * sizeof(int));

@@ -232,8 +232,120 @@ int matoi(const char* A) {
     return sign*res;
 }
 
+/*
+ Given a string S, find the longest palindromic substring in S.
+ 
+ Substring of string S:
+ 
+ S[i...j] where 0 <= i <= j < len(S)
+ 
+ Palindrome string:
+ 
+ A string which reads the same backwards. More formally, S is palindrome if reverse(S) = S.
+ 
+ Incase of conflict, return the substring which occurs first ( with the least starting index ).
+ 
+ Example :
+ 
+ Input : "aaaabaaa"
+ Output : "aaabaaa"
+ http://www.geeksforgeeks.org/longest-palindrome-substring-set-1/
+ http://www.geeksforgeeks.org/longest-palindromic-substring-set-2/
+ */
+//TIME O(n^2) and SPACE O(n^2)
+char* longestPalindrome(char* A) {
+    int i,j,n;
+    n = (int)strlen(A);
+    int **table = (int **)malloc((n*n)*sizeof(int*));
+    for (int i = 0; i < n; i ++) {
+        table[i] = (int *)malloc(n * sizeof(int));
+    }
+    for(i = 0; i < n; i ++)
+        for(j = 0; j < n; j ++)
+            table[i][j] = 0;
+    int start = 0, maxlen = 1;
+    for(i=0;i<n;i++)
+        table[i][i] = 1;
+    for(i = 0; i < n -1; i ++) {
+        if(A[i] == A[i + 1]){
+            table[i][i+1] = 1;
+            start = i;
+            maxlen = 2;
+        }
+    }
+    int k;
+    for(k = 3; k < n; k ++){
+        for(i = 0; i < n-k+1; i ++){
+            j = i + k -1;
+            if(table[i+1][j-1] && A[i]==A[j]){
+                table[i][j] = 1;
+                start = i;
+                maxlen = k;
+            }
+        }
+    }
+    char *res = (char *)malloc(1000000*sizeof(char));
+    for(i = start; i < start+maxlen; i ++)
+        res[i - start] = A[i];
+    res[i] = '\0';
+    return res;
+}
+
+//TIME O(n^2) and SPACE O(1);
+char* longestPalSubstr(char *A)
+{
+    int maxLength = 1;  // The result (length of LPS)
+    
+    int start = 0;
+    int len = (int)strlen(A);
+    
+    int low, high;
+    
+    // One by one consider every character as center point of
+    // even and length palindromes
+    for (int i = 1; i < len; ++i)
+    {
+        // Find the longest even length palindrome with center points
+        // as i-1 and i.
+        low = i - 1;
+        high = i;
+        while (low >= 0 && high < len && A[low] == A[high])
+        {
+            if (high - low + 1 > maxLength)
+            {
+                start = low;
+                maxLength = high - low + 1;
+            }
+            --low;
+            ++high;
+        }
+        
+        // Find the longest odd length palindrome with center
+        // point as i
+        low = i - 1;
+        high = i + 1;
+        while (low >= 0 && high < len && A[low] == A[high])
+        {
+            if (high - low + 1 > maxLength)
+            {
+                start = low;
+                maxLength = high - low + 1;
+            }
+            --low;
+            ++high;
+        }
+    }
+    
+    char *res = (char *)malloc(1000000*sizeof(char));
+    int i;
+    for(i = start; i < start+maxLength; i ++)
+        res[i - start] = A[i];
+    res[i] = '\0';
+    return res;
+}
+
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    printf("Hello, World!\n");
+
+    printf("STR : %s\n",longestPalSubstr("abbcccbbbcaaccbababcbcabca"));
     return 0;
 }
