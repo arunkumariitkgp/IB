@@ -336,7 +336,7 @@ struct Node* addLists(struct Node *h1, struct Node *h2) {
  
  Input :
  
- ______
+  ______
  |     |
  \/    |
  1 -> 2 -> 3 -> 4
@@ -368,6 +368,59 @@ struct Node* detectCycle(struct Node* A) {
      }
      else
     return NULL;
+}
+
+/*
+ Reorder List
+ Given a singly linked list
+ 
+ L: L0 → L1 → … → Ln-1 → Ln,
+ reorder it to:
+ 
+ L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → …
+ You must do this in-place without altering the nodes’ values.
+ 
+ For example,
+ Given {1,2,3,4}, reorder it to {1,4,2,3}.
+ 
+ Efficient Solution:
+ 
+ 1) Find the middle point using tortoise and hare method.
+ 2) Split the linked list in two halves using found middle point in step 1.
+ 3) Reverse the second half.
+ 4) Do alternate merge of first and second halves.
+ http://www.geeksforgeeks.org/rearrange-a-given-linked-list-in-place/
+ */
+struct Node* reorderList(struct Node* A) {
+    struct Node *slow = A;
+    struct Node *fast = A->next;
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    struct Node *h1, *h2;
+    h1 = A;
+    h2 = slow->next;
+    slow->next = NULL;
+    h2 = reverseIterative(h2);
+    
+    struct Node *final = (struct Node *)malloc(sizeof(struct Node));
+    final->data = 0;
+    final->next = NULL;
+    struct Node *current = final;
+    while(h1 || h2) {
+        if(h1) {
+            current->next = h1;
+            h1 = h1->next;
+            current = current->next;
+        }
+        if(h2) {
+            current->next = h2;
+            h2 = h2->next;
+            current = current->next;
+        }
+    }
+    return final->next;
 }
 
 int main(int argc, const char * argv[]) {
